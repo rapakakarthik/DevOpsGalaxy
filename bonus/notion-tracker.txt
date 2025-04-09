@@ -1,0 +1,15 @@
+# ✅ DevOpsGalaxy Progress Tracker (Paste into Notion Checklist)
+
+- [x] Setup GitHub Repo
+- [x] Create Folder Structure
+- [x] Added README.md
+- [x] Angular Dockerfile Created
+- [x] Laravel Dockerfile Created
+- [x] Jenkinsfiles Ready
+- [x] Terraform: VPC, EC2, RDS, S3, IAM
+- [x] Kubernetes YAMLs
+- [x] Site24x7 Setup Docs
+- [x] Cloudflare CDN Setup
+- [x] Mermaid Diagrams
+- [x] Resume, Skills, Certifications
+- [x] Interview Q&A Added

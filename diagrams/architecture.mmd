@@ -1,0 +1,13 @@
+---
+config:
+  layout: fixed
+---
+graph TD
+  A[User] --> B[Cloudflare DNS + CDN]
+  B --> C[Load Balancer AWS ALB]
+  C --> D[Angular Frontend S3/EC2]
+  C --> E[Laravel Backend EC2]
+  E --> F[(MySQL AWS RDS)]
+  G[Jenkins Server EC2] --> E
+  H[GitHub Repo] --> G
+  I[Site24x7] --> C

@@ -1,0 +1,9 @@
+flowchart TD
+  A[Dev pushes code to GitHub] --> B[Bitbucket/GitHub Webhook]
+  B --> C[Jenkins CI Pipeline]
+  C --> D[Build & Test]
+  D --> E[Docker Image Built]
+  E --> F[Push to DockerHub]
+  F --> G[Deploy to EC2 or K8s]
+  G --> H[Angular + Laravel Running Live]
+  G --> I[Notify Team / Slack / Email]

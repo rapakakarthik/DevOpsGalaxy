@@ -1,0 +1,54 @@
+pipeline {
+    agent any
+
+    environment {
+        NODE_ENV = "production"
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/rapakakarthik/devopsgalaxy-frontend.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'
+            }
+        }
+
+        stage('Build Angular App') {
+            steps {
+                sh 'npm run build --prod'
+            }
+        }
+
+        stage('Dockerize App') {
+            steps {
+                sh '''
+                docker build -t devops-frontend .
+                docker tag devops-frontend yourdockerhubuser/devops-frontend:latest
+                '''
+            }
+        }
+
+        stage('Push to DockerHub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                    docker push yourdockerhubuser/devops-frontend:latest
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy to EC2 / K8s') {
+            steps {
+                echo 'Triggering deployment script or K8s apply...'
+                // Add your ssh/kubectl apply here
+            }
+        }
+    }
+}

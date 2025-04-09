@@ -1,0 +1,60 @@
+pipeline {
+    agent any
+
+    environment {
+        COMPOSER_ALLOW_SUPERUSER = 1
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/rapakakarthik/devopsgalaxy-backend.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'composer install --no-interaction'
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh './vendor/bin/phpunit'
+            }
+        }
+
+        stage('Dockerize Laravel App') {
+            steps {
+                sh '''
+                docker build -t devops-backend .
+                docker tag devops-backend yourdockerhubuser/devops-backend:latest
+                '''
+            }
+        }
+
+        stage('Push to DockerHub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                    echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                    docker push yourdockerhubuser/devops-backend:latest
+                    '''
+                }
+            }
+        }
+
+        stage('Database Migrate') {
+            steps {
+                echo 'Running DB migrations on remote EC2 / container...'
+                // Example: ssh into EC2 and run artisan migrate
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo 'Deployment logic here — EC2, ECS, or K8s apply'
+            }
+        }
+    }
+}
